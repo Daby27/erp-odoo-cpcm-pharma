@@ -35,33 +35,33 @@ L’objectif était donc de créer une solution **centralisée, moderne et adapt
 
 # 🎯 Objectifs principaux
 
-### 🔍 Gestion de la prospection
+###  Gestion de la prospection
 - Création et suivi des prospects  
 - Classification par type : Médecins, Pharmacies, Grossistes, Structure médicale 
 - Transformation d’un prospect en client (`res.partner`)
 
-### 🧭 Tournées & visites
+###  Tournées & visites
 - Planification des tournées  
 - Validation par superviseur  
 - Suivi des visites terrain  
 
-### 🛒 Commandes & ADV
+###  Commandes & ADV
 - Création des commandes  
 - Validation par ADV  
 - Génération des bons de commande PDF  
 - Envoi automatique d’email  
 
-### 📦 Stock
+###  Stock
 - Mise à jour des quantités  
 - Traçabilité des médicaments  
 
-### 📊 Analyse
+###  Analyse
 - Tableau de bord  
 - Statistiques de commandes et activités  
 
 ---
 
-# 🧩 Fonctionnalités clés
+#  Fonctionnalités clés
 
 - CRM personnalisé pour VMC  
 - Workflow complet : **Prospect → Visite → Commande → Stock**  
@@ -72,7 +72,7 @@ L’objectif était donc de créer une solution **centralisée, moderne et adapt
 
 ---
 
-# 🔧 Technologies utilisées
+#  Technologies utilisées
 
 - **Odoo 13**  
 - **Python (Backend)**  
@@ -83,7 +83,7 @@ L’objectif était donc de créer une solution **centralisée, moderne et adapt
 
 ---
 
-# 🌀 Méthodologie
+#  Méthodologie
 
 Méthode **Agile Scrum** :  
 - Sprints courts  
@@ -93,7 +93,7 @@ Méthode **Agile Scrum** :
 
 ---
 
-# 🧭 Modélisation UML
+#  Modélisation UML
 
 Inclut :  
 - Diagramme de contexte  
