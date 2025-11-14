@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action et menu -->
+    <record id="action_cpcm_visite" model="ir.actions.act_window">
+        <field name="name">Visites</field>
+        <field name="res_model">cpcm.visite</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p>Liste des visites effectuées par les VMC selon les tournées validées.</p>
+        </field>
+    </record>
+
+
+
+    <!-- Vue formulaire -->
+    <record id="view_cpcm_visite_form" model="ir.ui.view">
+        <field name="name">cpcm.visite.form</field>
+        <field name="model">cpcm.visite</field>
+        <field name="arch" type="xml">
+            <form string="Visite">
+                <header>
+                    <button name="action_marquer_effectuee"
+                            type="object"
+                            string="Marquer comme effectuée"
+                            states="draft"
+                            class="btn-primary"
+                            attrs="{'invisible': [('id', '=', False)]}"
+                    />
+                    <button name="action_annuler_visite" type="object" string="Annuler" states="draft"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="plan_id" />
+                        <field name="vmc" />
+                        <field name="jour_id"/>
+
+
+                        <field name="ligne_ids" create="false">
+                            <tree editable="bottom" create="false">
+                                <field name="partner_id"/>
+                                <field name="type_client"/>
+                                <field name="visite_effectuee" attrs="{'readonly': [('visite_annuler', '=', True)]}"/>
+                                <field name="visite_annuler" attrs="{'readonly': [('visite_effectuee', '=', True)]}"/>
+                                <field name="heure" readonly="1"/>
+                                <field name="raison_annulation" attrs="{'invisible': [('visite_annuler', '!=', True)]}" placeholder="Décrivez pourquoi la visite a été annulée..."/>
+                            </tree>
+                        </field>
+
+
+                        <field name="remarques"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+        <!-- Vue liste -->
+    <record id="view_cpcm_visite_tree" model="ir.ui.view">
+        <field name="name">cpcm.visite.tree</field>
+        <field name="model">cpcm.visite</field>
+        <field name="arch" type="xml">
+            <tree string="Visites">
+                <field name="name"/>
+                <field name="plan_id" />
+                <field name="vmc" />
+                <field name="jour_id"/>
+
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
