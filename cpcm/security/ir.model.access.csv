@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cpcm_visite_user,cpcm.visite,model_cpcm_visite,,1,1,1,1
+access_cpcm_visite_ligne,cpcm.visite.ligne,model_cpcm_visite_ligne,,1,1,1,0
+access_cpcm_commande_vmc,cpcm.commande,model_cpcm_commande,cpcm.group_vmc,1,1,1,1
+
+access_cpcm_commande_adv,cpcm.commande,model_cpcm_commande,cpcm.group_adv,1,1,0,0
+access_cpcm_commande_ligne_vmc,cpcm.commande.ligne,model_cpcm_commande_ligne,cpcm.group_vmc,1,1,1,1
+access_cpcm_commande_ligne_adv,cpcm.commande.ligne,model_cpcm_commande_ligne,cpcm.group_adv,1,0,0,0
+
+access_cpcm_tournee_vmc,cpcm.tournee,model_cpcm_tournee,cpcm.group_vmc,1,1,1,1
+access_cpcm_tournee_superviseur,cpcm.tournee,model_cpcm_tournee,cpcm.group_superviseur,1,1,0,0
+
+access_cpcm_tournee_jour,cpcm.tournee.jour,model_cpcm_tournee_jour,base.group_user,1,1,1,1
+
+access_cpcm_jour,cpcm.jour,model_cpcm_jour,,1,1,1,1
+access_cpcm_tournee_confirmation,cpcm.tournee.confirmation,model_cpcm_tournee_confirmation,base.group_user,1,1,1,0
