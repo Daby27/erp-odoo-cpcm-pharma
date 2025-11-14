@@ -109,6 +109,11 @@ class CpcmTournee(models.Model):
             date_courante += timedelta(days=1)
 
         # Ouvre un popup de confirmation
+        # NOTE :
+        # Cette action ouvre normalement un wizard 'cpcm.tournee.confirmation'.
+        # Le wizard n'est pas inclus dans cette version publique du code.
+        # Il sert uniquement à confirmer la génération des dates de tournée.
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'Confirmer la génération',
