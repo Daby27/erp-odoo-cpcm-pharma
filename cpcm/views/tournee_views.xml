@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_cpcm_tournee_form" model="ir.ui.view">
+        <field name="name">cpcm.tournee.form</field>
+        <field name="model">cpcm.tournee</field>
+        <field name="arch" type="xml">
+            <form string="Plan de tournée">
+                <header>
+                    <button name="generer_jours_tournee"
+                            string="Générer les jours"
+                            type="object"
+                            group="cpcm.group_vmc"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
+                            />
+                    <button name="action_submit"
+                            type="object"
+                            string="transmettre"
+                            class="btn-primary"
+                            group="cpcm.group_vmc"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
+                            />
+
+                    <button name="action_validate_plan_tournee"
+                            string="Valider le Plan"
+                            type="object"
+                            class="btn-success"
+                            groups="cpcm.group_superviseur"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}" />
+                    <button name="action_reject_plan_tournee"
+                            string="Rejeter le Plan"
+                            type="object"
+                            class="btn-danger"
+                            groups="cpcm.group_superviseur"
+                            confirm="Est etes vous sur de rejeter le plan"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}" />
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,validated,rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="vmc_id"/>
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                        <field name="jours_couvrables_ids" options="{'no_create': True}"/>
+                        <field name="jours_feries_ids" widget="many2many_tags" options="{'no_create': True}" placeholder="Aucun jour férié détecté"/>
+
+                    </group>
+                    <notebook>
+                        <page string="Jours de tournée">
+                            <field name="ligne_ids" create="false">
+                                <tree editable="bottom" create="false">
+                                    <field name="date"/>
+                                    <field name="localite"/>
+                                    <field name="pharmacie_ids" widget="many2many_tags" domain="[('function', '=', 'Pharmacie')]" options="{'no_create': True}"/>
+                                    <field name="structure_medicale_ids" widget="many2many_tags" domain="[('function', '=', 'Structure médicale')]" options="{'no_create': True}"/>
+                                    <field name="medecin_ids" widget="many2many_tags" domain="[('function', '=', 'Médecin')]" options="{'no_create': True}"/>
+                                    <field name="grossiste_observation_ids" widget="many2many_tags" domain="[('function', '=', 'Grossiste médical')]" options="{'no_create': True}"/>
+                                </tree>
+
+
+
+                                <form >
+                                    <group>
+                                        <field name="date"/>
+                                        <field name="localite"/>
+                                        <field name="pharmacie_ids" widget="many2many_tags" domain="[('function', '=', 'Pharmacie')]" options="{'no_create': True}"/>
+                                        <field name="structure_medicale_ids" widget="many2many_tags" domain="[('function', '=', 'Structure médicale')]" options="{'no_create': True}" />
+                                        <field name="medecin_ids" widget="many2many_tags" domain="[('function', '=', 'Médecin')]" options="{'no_create': True}"/>
+                                        <field name="grossiste_observation_ids" widget="many2many_tags" domain="[('function', '=', 'Grossiste médical')]" options="{'no_create': True}"/>
+                                    </group>
+                                </form>
+
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cpcm_tournee_tree" model="ir.ui.view">
+        <field name="name">cpcm.tournee.tree</field>
+        <field name="model">cpcm.tournee</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="vmc_id"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="state" widget="statusbar" statusbar_visible="submitted,validated,rejected"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Recherche -->
+    <record id="view_cpcm_tournee_search" model="ir.ui.view">
+        <field name="name">cpcm.tournee.search</field>
+        <field name="model">cpcm.tournee</field>
+        <field name="arch" type="xml">
+            <search string="Recherche Tournee">
+
+                <!-- Filtres par état -->
+
+                <filter name="filter_draft" string="Brouillon" domain="[('state','=','draft')]" groups="cpcm.group_vmc"/>
+                <filter name="filter_submitted" string="Soumis" domain="[('state','=','submitted')]" />
+                <filter name="filter_validated" string="Validé" domain="[('state','=','validated')]" />
+                <filter name="filter_rejected" string="Rejeté" domain="[('state','=','rejected')]" />
+
+                <!-- Barre de recherche -->
+                <field name="name" string="Nom du plan"/>
+                <field name="vmc_id"/>
+
+                <!-- Regroupements -->
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_name" string="Nom du plan" context="{'group_by':'name'}"/>
+                    <filter name="group_vmc_id" string="VMC" context="{'group_by':'vmc_id'}"/>
+
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <!--Action pour le VMC-->
+    <record id="action_cpcm_tournee" model="ir.actions.act_window">
+        <field name="name">Plans de tournée</field>
+        <field name="res_model">cpcm.tournee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_cpcm_tournee_search"/>
+    </record>
+
+    <!--Action pour le superviseur-->
+        <record id="action_cpcm_tournee_superviseur" model="ir.actions.act_window">
+        <field name="name">Plans de tournée à valider</field>
+        <field name="res_model">cpcm.tournee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_cpcm_tournee_search"/>
+        <field name="domain">[('state', 'in', ['submitted', 'validated', 'rejected'])]</field>
+    </record>
+
+</odoo>
