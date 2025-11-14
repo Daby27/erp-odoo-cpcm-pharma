@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_cpcm_commande" model="ir.ui.view">
+        <field name="name">cpcm.commande.form</field>
+        <field name="model">cpcm.commande</field>
+        <field name="arch" type="xml">
+            <form string="Commande" edit="1" create="0" delete="0">
+                <header>
+                    <!-- VMC : Bouton envoyer à l'ADV -->
+                    <button name="action_submit_to_adv"
+                            type="object" string="Envoyer à l'ADV"
+                            groups="cpcm.group_vmc"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
+                            class="btn-primary"
+                    />
+
+                    <!-- ADV : Valider -->
+                    <button name="action_adv_validate"
+                            type="object"
+                            string="Valider"
+                            groups="cpcm.group_adv"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}"
+                            class="btn-success"/>
+
+                    <!-- ADV : Rejeter -->
+                    <button name="action_adv_reject"
+                            type="object"
+                            string="Rejeter"
+                            groups="cpcm.group_adv"
+                            confirm="Êtes-vous sûr ?"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}"
+                            class="btn-danger"/>
+
+                    <field name="state" readonly="1" widget="statusbar" statusbar_visible="draft,submitted,validated,rejected"/>
+
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="client_id"/>
+                        <field name="vmc_id"/>
+                        <field name="date"/>
+                        <field name="grossiste_id" groups="cpcm.group_adv"/>
+
+                    </group>
+
+                    <notebook>
+                        <page string="Lignes de Commande">
+                            <field name="ligne_commande_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit" readonly="1"/>
+                                    <field name="subtotal" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <group>
+                        <field name="montant_total" readonly="1"/>
+                    </group>
+                    <!--fil d’historique des statuts et la creation de la commande -->
+                    <field name="message_ids" widget="mail_thread" colspan="4"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_cpcm_commande" model="ir.ui.view">
+        <field name="name">cpcm.commande.tree</field>
+        <field name="model">cpcm.commande</field>
+        <field name="arch" type="xml">
+            <tree string="Commandes">
+                <field name="client_id"/>
+                <field name="vmc_id"/>
+                <field name="grossiste_id" groups="cpcm.group_adv"/>
+                <field name="date"/>
+                <field name="state"/>
+                <!--<field name="montant_total"/>-->
+                <field name="montant_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+            </tree>
+        </field>
+    </record>
+
+
+            <!-- Vue Recherche -->
+    <record id="view_cpcm_commande_search" model="ir.ui.view">
+        <field name="name">cpcm.commande.search</field>
+        <field name="model">cpcm.commande</field>
+        <field name="arch" type="xml">
+            <search string="Recherche Commande">
+
+                <!-- Filtres par état -->
+
+                <filter name="filter_draft" string="Brouillon" domain="[('state','=','draft')]" groups="cpcm.group_vmc"/>
+
+                <filter name="filter_submitted" string="Soumis" domain="[('state','=','submitted')]" />
+                <filter name="filter_validated" string="Validé" domain="[('state','=','validated')]" />
+                <filter name="filter_rejected" string="Rejeté" domain="[('state','=','rejected')]" />
+
+                <!-- Barre de recherche -->
+                <field name="client_id" string="Client"/>
+                <field name="client_id"/>
+                <field name="date"/>
+
+                <!-- Regroupements -->
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_client_id" string="Client" context="{'group_by':'client_id'}"/>
+                    <filter name="group_date" string="Date de commande" context="{'group_by':'date'}"/>
+                </group>
+                <field name="grossiste_id"/>
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_grossiste" string="Grossiste" context="{'group_by': 'grossiste_id'}"/>
+                </group>
+
+
+            </search>
+        </field>
+    </record>
+
+    <!--Action pour la vue du VMC -->
+    <record id="action_cpcm_commande" model="ir.actions.act_window">
+        <field name="name">Commandes</field>
+        <field name="res_model">cpcm.commande</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_cpcm_commande_search"/>
+    </record>
+
+    <!--Action pour la vue du ADV -->
+    <record id="action_commande_adv" model="ir.actions.act_window">
+        <field name="name">Commandes à traiter</field>
+        <field name="res_model">cpcm.commande</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['submitted', 'validated', 'rejected'])]</field>
+        <field name="search_view_id" ref="view_cpcm_commande_search"/>
+    </record>
+
+</odoo>
